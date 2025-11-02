@@ -1,60 +1,124 @@
 /* ---- Diseño y variables ---- */
-    :root{
-      --primary:#6c5ce7; /* color principal que puede cambiarse */
-      --muted:#6c757d;
-      --card-radius:1rem;
-    }
+:root {
+  --primary: #6c5ce7; /* color principal que puede cambiarse */
+  --muted: #6c757d;
+  --card-radius: 1rem;
+}
 
-    body{
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      color:#222;
-      background: #fff;
-    }
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #222;
+  background: #fff;
+}
 
-    /* Header */
-    .site-header{
-      padding: .75rem 1rem;
-      border-bottom:1px solid #eee;
-      background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
-      backdrop-filter: blur(4px);
-    }
-    .brand-icon{
-      width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:var(--primary);color:white;font-weight:600;
-    }
+/* Header */
+.site-header {
+  padding: .75rem 1rem;
+  border-bottom: 1px solid #eee;
+  background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+  backdrop-filter: blur(4px);
+}
+.brand-icon {
+  width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; background: var(--primary); color: white; font-weight: 600;
+}
 
-    /* Hero spacing so carousel touches edges on small screens */
-    .carousel, .carousel-inner, .carousel-item img{height:240px; object-fit:cover;}
-    @media(min-width:768px){
-      .carousel, .carousel-inner, .carousel-item img{height:360px;}
-    }
+/* Hero spacing so carousel touches edges on small screens */
+.carousel, .carousel-inner, .carousel-item img { height: 240px; object-fit: cover; }
+@media (min-width: 768px) {
+  .carousel, .carousel-inner, .carousel-item img { height: 360px; }
+}
 
-    /* Servicios */
-    .servicio-card{border-radius:var(--card-radius);box-shadow:0 6px 18px rgba(99,99,99,0.06);}
+/* Servicios */
+.servicio-card { border-radius: var(--card-radius); box-shadow: 0 6px 18px rgba(99,99,99,0.06); }
 
-    /* WhatsApp floating */
-    .whatsapp-fab{
-      position:fixed;right:1rem;bottom:1rem;z-index:1080;border-radius:50%;width:56px;height:56px;display:grid;place-items:center;background:#25D366;color:white;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,0.15);
-    }
+/* WhatsApp floating */
+.whatsapp-fab {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 1080; border-radius: 50%; width: 56px; height: 56px; display: grid; place-items: center; background: #25D366; color: white; text-decoration: none; box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
 
-    footer{padding:1.25rem 1rem;background:#f8f9fa;border-top:1px solid #e9ecef}
+footer { padding: 1.25rem 1rem; background: #f8f9fa; border-top: 1px solid #e9ecef; }
 
-    /* Pequeñas mejoras de accesibilidad y foco */
-    .nav-link:focus, .btn:focus{outline:3px solid rgba(108,92,231,0.12);outline-offset:2px}
+/* Pequeñas mejoras de accesibilidad y foco */
+.nav-link:focus, .btn:focus { outline: 3px solid rgba(108,92,231,0.12); outline-offset: 2px; }
 
+.servicio-card .card-img-top {
+  height: 200px;           /* Altura fija para todas las imágenes */
+  object-fit: cover;       /* Recorta sin deformar */
+  object-position: center; /* Centra el recorte */
+  border-radius: 0.375rem 0.375rem 0 0; /* Mantiene bordes redondeados del card */
+}
 
+/* Fixes para Tailwind vs Bootstrap navbar (expandido para visibilidad completa) */
+.navbar-collapse {
+  transition: all 0.35s ease !important;
+  z-index: 1055 !important;
+  overflow: visible !important;  /* Nuevo: evita clip en móvil */
+}
+.navbar-nav {
+  display: flex !important;  /* Bootstrap usa flex; fuerza sobre Tailwind resets */
+  list-style: none !important;
+  gap: 0 !important;  /* Remueve gap Tailwind; usa Bootstrap's margins */
+}
+.nav-item {
+  display: list-item !important;  /* Nuevo: asegura items visibles */
+}
+.nav-link {
+  display: block !important;  /* Nuevo: fuerza block para links */
+  gap: 0.5rem !important;
+  transition: background-color 0.2s ease !important;
+  color: #212529 !important;  /* Color oscuro para visibilidad */
+  white-space: nowrap !important;  /* Nuevo: evita wrap en links */
+}
+.nav-link:hover {
+  background-color: rgba(0,0,0,0.1) !important;
+  color: #6c5ce7 !important;  /* Color brand en hover */
+}
+.navbar-toggler {
+  z-index: 1060 !important;
+  border: none !important;  /* Limpio */
+}
+.navbar-toggler:focus {
+  box-shadow: none !important;
+}
+
+/* Responsive: En móvil, menú full-width y visible */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: #f8f9fa !important;
+    border-top: 1px solid #dee2e6 !important;
+    max-height: 70vh !important;  /* Nuevo: limita altura para scroll interno si es largo */
+    overflow-y: auto !important;  /* Nuevo: scroll si menú crece */
+  }
+  .navbar-nav {
+    flex-direction: column !important;  /* Stack vertical en móvil */
+  }
+  .nav-link {
+    border-bottom: 1px solid #dee2e6 !important;  /* Separadores en móvil */
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+}
+/* Mejora responsive: En móvil, captions más compactos */
+@media (max-width: 768px) {
+  .carousel-caption h1 { font-size: 2rem; }
+  .carousel-caption p { font-size: 1rem; }
+}
+
+/* Opcional: en móviles, reduce la altura para ahorrar espacio */
+@media (max-width: 576px) {
   .servicio-card .card-img-top {
-    height: 200px;           /* Altura fija para todas las imágenes */
-    object-fit: cover;       /* Recorta sin deformar */
-    object-position: center; /* Centra el recorte */
-    border-radius: 0.375rem 0.375rem 0 0; /* Mantiene bordes redondeados del card */
+    height: 160px;
   }
-
-  /* Opcional: en móviles, reduce la altura para ahorrar espacio */
-  @media (max-width: 576px) {
-    .servicio-card .card-img-top {
-      height: 160px;
-    }
-  }
-
+}
