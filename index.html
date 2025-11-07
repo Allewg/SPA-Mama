@@ -3,401 +3,509 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> Masoterapia Paola </title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💆</text></svg>" />  <!-- Favicon SPA (emoji masaje); usa PNG real si prefieres -->
-
-  <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <title>Masoterapia Paola - Bienestar y Relajación</title>
+  <meta name="description" content="Centro de masoterapia en San Bernardo con servicios relajantes y profesionales. Reserva tu sesión hoy.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💆</text></svg>">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#EC4899', // Rosa lavanda femenino
+            secondary: '#A7F3D0', // Verde menta suave
+            neutral: '#FEF3F2', // Beige cálido
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css">
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- DaisyUI CDN (UI Components) -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.4/dist/full.min.css" rel="stylesheet" />
+  
+  <style>
+    /* Animación de iluminación suave en menú móvil */
+    @keyframes glowItem {
+      0% {
+        box-shadow: 0 0 0 rgba(236, 72, 153, 0);
+      }
+      100% {
+        box-shadow: 0 0 12px rgba(236, 72, 153, 0.6);
+      }
+    }
 
+    #mobile-menu a {
+      transition: 
+        color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.4s ease;
+      border-radius: 8px;
+      padding: 0.6rem 0.8rem;
+    }
 
+    #mobile-menu a:hover {
+      color: var(--tw-color-primary, #EC4899);
+      background: rgba(236, 72, 153, 0.12);
+      transform: translateX(6px);
+      animation: glowItem 0.5s forwards;
+    }
+
+    /* Glassmorphism refinado (aumentamos opacidad para mejor contraste) */
+    .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(236, 72, 153, 0.2); }
+    /* Gradiente femenino */
+    .gradient-fem { background: linear-gradient(135deg, #EC4899, #A7F3D0); }
+    /* Smooth scroll global */
+    html { scroll-behavior: smooth; }
+    /* Pulse para CTA */
+    @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.7); } 50% { box-shadow: 0 0 0 10px rgba(236, 72, 153, 0); } }
+    .pulse { animation: pulse 2s infinite; }
+
+    /* --- Ajustes para services: grid en desktop --- */
+    @media (min-width: 1024px) {
+      /* Cuando estamos en desktop convertimos el wrapper en grid de 3 columnas */
+      .services-swiper .swiper-wrapper {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        align-items: start;
+      }
+      .services-swiper .swiper-slide {
+        width: auto; /* que no fuerce anchos de swiper */
+      }
+      /* ocultar controles del swiper en desktop (ya no necesarios) */
+      .services-swiper .swiper-pagination,
+      .services-swiper .swiper-button-next,
+      .services-swiper .swiper-button-prev {
+        display: none !important;
+      }
+    }
+
+    /* small tweak para que el menú mobile se vea sobre todo */
+    #mobile-backdrop { /* controlador de click externo */
+      transition: opacity 0.25s ease;
+    }
+  </style>
 </head>
-<body>
-
-<header class="site-header sticky-top bg-light shadow-sm">
-  <nav class="navbar navbar-expand-lg p-0" aria-label="Navegación principal">
-    <div class="container position-relative">
-      <div class="d-flex align-items-center gap-3">
-        <div class="brand-icon text-white p-2 rounded-circle" style="background: #6c5ce7;">
-          <i class="bi bi-flower1" style="font-size: 1.3rem;"></i>
+<body class="bg-neutral font-sans antialiased w-full">
+  
+  <!-- Preloader (opcional) -->
+  <div id="preloader" class="fixed inset-0 bg-white flex items-center justify-center z-50">
+    <div class="text-primary">Cargando...</div>
+  </div>
+  
+  <!-- Header con Glass -->
+  <header class="sticky top-0 glass z-40 w-full">
+    <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-primary p-2 rounded-full">
+          <i data-lucide="flower" class="w-6 h-6 text-white"></i>
         </div>
         <div>
-          <h1 class="h5 mb-0"><strong>Masoterapia Paola </strong></h1>
-          <small class="text-muted d-none d-sm-block">Bienestar y relajación</small>
+          <h1 class="text-xl font-bold text-gray-900">Masoterapia Paola</h1>
+          <p class="text-sm text-gray-500 hidden sm:block">Bienestar y relajación</p>
         </div>
       </div>
-      <button class="navbar-toggler position-absolute end-0 top-50 translate-middle-y border-0 p-2" style="z-index: 1060 !important;" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
-        <span class="navbar-toggler-icon"></span>
+      
+      <!-- Desktop Nav con iconos -->
+      <ul class="hidden md:flex items-center gap-6">
+        <li><a href="#galeria" class="nav-link text-gray-700 hover:text-primary transition flex items-center"><i data-lucide="image" class="w-4 h-4 mr-1"></i>Galería</a></li>
+        <li><a href="#servicios" class="nav-link text-gray-700 hover:text-primary transition flex items-center"><i data-lucide="heart-pulse" class="w-4 h-4 mr-1"></i>Servicios</a></li>
+        <li><a href="#testimonios" class="nav-link text-gray-700 hover:text-primary transition flex items-center"><i data-lucide="message-circle" class="w-4 h-4 mr-1"></i>Testimonios</a></li>
+        <li><a href="#quienes-somos" class="nav-link text-gray-700 hover:text-primary transition flex items-center"><i data-lucide="user" class="w-4 h-4 mr-1"></i>Quiénes somos</a></li>
+        <li><a href="#donde-estamos" class="nav-link text-gray-700 hover:text-primary transition flex items-center"><i data-lucide="map-pin" class="w-4 h-4 mr-1"></i>Dónde estamos</a></li>
+      </ul>
+      
+      <!-- Mobile Menu Button (agregamos shadow para más contraste) -->
+      <button id="mobile-toggle" class="md:hidden shadow-md rounded-full p-1" aria-expanded="false" aria-controls="mobile-menu">
+        <i data-lucide="menu" class="w-6 h-6 text-gray-700"></i>
       </button>
-      <div class="collapse navbar-collapse mt-2" id="mainNav">
-        <ul class="navbar-nav ms-auto p-3 p-lg-0 bg-light rounded-3 shadow-sm">
-          <li class="nav-item">
-            <a class="nav-link d-flex align-items-center px-3 py-2 text-decoration-none text-dark" href="#galeria">
-              <i class="bi bi-images me-2"></i> Galería
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link d-flex align-items-center px-3 py-2 text-decoration-none text-dark" href="#servicios">
-              <i class="bi bi-heart-pulse me-2"></i> Servicios
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link d-flex align-items-center px-3 py-2 text-decoration-none text-dark" href="#testimonios">
-              <i class="bi bi-chat-quote me-2"></i> Testimonios
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link d-flex align-items-center px-3 py-2 text-decoration-none text-dark" href="#quienes-somos">
-              <i class="bi bi-person-heart me-2"></i> Quiénes somos
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link d-flex align-items-center px-3 py-2 text-decoration-none text-dark" href="#donde-estamos">
-              <i class="bi bi-geo-alt me-2"></i> Dónde estamos
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</header>
 
-  <main>
-   <!-- GALERIA: CARRUSEL HERO FULL-VIEWPORT (fixed: h-100 en lugar de h-0, lazy loading, captions móviles) -->
-<!-- GALERIA: CARRUSEL HERO FULL-VIEWPORT (con botón "Agenda YA!" superpuesto llamativo) -->
-<section id="galeria" class="position-relative overflow-hidden" style="height: 100vh; min-height: 100vh;">
-  <div class="container-fluid px-0 h-100 d-flex align-items-center">
-    <div id="carouselGaleria" class="carousel slide h-100 w-100" data-bs-ride="carousel" data-bs-interval="5000">
-      <div class="carousel-inner h-100">
-        <div class="carousel-item active h-100 position-relative">
-          <img src="images/Centro0.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Masaje relajante en sala acogedora del Centro Masoterapéutico Mamá" loading="lazy" style="min-height: 100vh;">
-          <div class="carousel-caption position-absolute bottom-0 start-0 end-0 p-4 pb-5 text-start d-md-block" style="background: linear-gradient(transparent, rgba(0,0,0,0.7)); backdrop-filter: blur(5px);">
-            <h1 class="display-3 fw-bold text-white mb-2">Relajación profunda</h1>
-            <p class="lead text-white-50 mb-0">Ambiente cálido y profesionales certificados para tu bienestar total.</p>
+    </nav>
+  </header>
+
+  <!-- MÓVIL: backdrop (para cerrar al clicar por fuera) y drawer mobile fuera del header para evitar problema de containing block -->
+  <div id="mobile-backdrop" class="fixed inset-0 bg-black/40 hidden z-40" aria-hidden="true"></div>
+
+  <div id="mobile-menu" class="fixed inset-y-0 right-0 w-64 bg-white shadow-2xl shadow-gray-200 border-l border-primary transform translate-x-full transition-transform duration-300 md:hidden z-50" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
+    <div class="p-4 h-full flex flex-col">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="bg-primary p-2 rounded-full">
+            <i data-lucide="flower" class="w-6 h-6 text-white"></i>
           </div>
+          <h2 id="mobile-menu-title" class="font-bold text-gray-900">Masoterapia Paola</h2>
         </div>
-        <div class="carousel-item h-100 position-relative">
-          <img src="images/Centro1.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Masaje con piedras calientes para aliviar tensión muscular en San Bernardo" loading="lazy" style="min-height: 100vh;">
-          <div class="carousel-caption position-absolute bottom-0 start-0 end-0 p-4 pb-5 text-start d-md-block" style="background: linear-gradient(transparent, rgba(0,0,0,0.7)); backdrop-filter: blur(5px);">
-            <h1 class="display-3 fw-bold text-white mb-2">Masaje con piedras calientes</h1>
-            <p class="lead text-white-50 mb-0">Experiencia única para aliviar tensión muscular y equilibrar tu energía.</p>
-          </div>
-        </div>
-        <div class="carousel-item h-100 position-relative">
-          <img src="images/Centro2.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Espacios acogedores y tranquilos en el Centro Masoterapéutico Mamá" loading="lazy" style="min-height: 100vh;">
-          <div class="carousel-caption position-absolute bottom-0 start-0 end-0 p-4 pb-5 text-start d-md-block" style="background: linear-gradient(transparent, rgba(0,0,0,0.7)); backdrop-filter: blur(5px);">
-            <h1 class="display-3 fw-bold text-white mb-2">Espacios acogedores</h1>
-            <p class="lead text-white-50 mb-0">Disfruta de un espacio pensado para tu tranquilidad y desconexión total.</p>
-          </div>
-        </div>
+        <button id="close-mobile" class="ml-2" aria-label="Cerrar menú">
+          <i data-lucide="x" class="w-6 h-6 text-gray-700"></i>
+        </button>
       </div>
-      <!-- Indicadores en pie (llamativos) -->
-      <div class="carousel-indicators position-absolute bottom-0 start-50 translate-middle-x mb-3">
-        <button type="button" data-bs-target="#carouselGaleria" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" style="width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.5);"></button>
-        <button type="button" data-bs-target="#carouselGaleria" data-bs-slide-to="1" aria-label="Slide 2" style="width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.5);"></button>
-        <button type="button" data-bs-target="#carouselGaleria" data-bs-slide-to="2" aria-label="Slide 3" style="width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.5);"></button>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselGaleria" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon bg-dark bg-opacity-50 rounded-circle p-3" aria-hidden="true"></span>
-        <span class="visually-hidden">Anterior</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselGaleria" data-bs-slide="next">
-        <span class="carousel-control-next-icon bg-dark bg-opacity-50 rounded-circle p-3" aria-hidden="true"></span>
-        <span class="visually-hidden">Siguiente</span>
-      </button>
+      <ul class="space-y-4 mt-6 flex-1">
+        <li><a href="#galeria" class="block py-2 text-gray-700 hover:text-primary flex items-center"><i data-lucide="image" class="w-4 h-4 mr-2"></i>Galería</a></li>
+        <li><a href="#servicios" class="block py-2 text-gray-700 hover:text-primary flex items-center"><i data-lucide="heart-pulse" class="w-4 h-4 mr-2"></i>Servicios</a></li>
+        <li><a href="#testimonios" class="block py-2 text-gray-700 hover:text-primary flex items-center"><i data-lucide="message-circle" class="w-4 h-4 mr-2"></i>Testimonios</a></li>
+        <li><a href="#quienes-somos" class="block py-2 text-gray-700 hover:text-primary flex items-center"><i data-lucide="user" class="w-4 h-4 mr-2"></i>Quiénes somos</a></li>
+        <li><a href="#donde-estamos" class="block py-2 text-gray-700 hover:text-primary flex items-center"><i data-lucide="map-pin" class="w-4 h-4 mr-2"></i>Dónde estamos</a></li>
+      </ul>
     </div>
   </div>
 
-
-</section>
-
-<!-- CSS adicional para el botón animado (agrega en <style> o styles.css) -->
-<style>
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-    50% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
-  }
-  /* Hover para botón: Escala y brillo */
-  .btn-success:hover {
-    transform: translateY(50%) scale(1.05) !important;
-    background: linear-gradient(135deg, #128C7E, #25D366) !important;
-  }
-</style>
-
-    <!-- SERVICIOS: Título y descripción centrados -->
-<section id="servicios" class="py-5">
-  <div class="container">
-    <!-- Título y texto centrado con icono -->
-    <div class="row justify-content-center mb-4">
-      <div class="col-12 col-lg-10 text-center">
-        <!-- Wrapper flex para icono a la izquierda del título, centrado overall -->
-        <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
-          <i class="bi bi-heart-pulse text-primary fs-1" style="font-size: 3rem; flex-shrink: 0;"></i>
-          <h2 class="h2 mb-0">Nuestros servicios</h2>
-        </div>
-        <p class="text-muted lead">
-          Elige la experiencia que mejor se adapte a tu bienestar. Reserva y regálate un momento para ti.
-        </p>
-      </div>
-    </div>
-
-    <!-- Tarjetas de servicios (iconos y botones alineados: centrados horizontal/vertical con spacing consistente) -->
-    <div class="row g-4">
-      <!-- Servicio 1 -->
-      <div class="col-12 col-md-6 col-lg-4">
-        <article class="card servicio-card h-100 p-0 shadow-sm d-flex flex-column">
-          <img src="images/piedrascalientes.jpg" class="card-img-top flex-shrink-0" alt="Masaje piedras calientes">
-          <div class="card-body d-flex flex-column text-center flex-grow-1">  <!-- flex-grow-1 para empujar contenido; text-center para horizontal -->
-            <!-- Icono correspondiente arriba del título, con spacing fijo para alineación vertical -->
-            <i class="bi bi-fire text-warning fs-1 mb-3 d-block mx-auto" style="font-size: 2.5rem;"></i>  <!-- mb-3 consistente -->
-            <h3 class="h6 mb-2">Masaje piedras calientes</h3>  <!-- mb-2 para spacing uniforme -->
-            <p class="mb-2"><strong>$30.000</strong> — 45 min</p>  <!-- mb-2 -->
-            <p class="text-muted small flex-grow-1 mb-3">  <!-- flex-grow-1 para llenar espacio; mb-3 para gap con botón -->
-              Una terapia que combina calor y presión para relajar músculos profundos y equilibrar tu energía. Ideal si buscas descontracturar y relajarte profundamente.
-            </p>
-            <!-- Botón alineado al centro inferior, con icono centrado en él -->
-            <a href="https://wa.me/56993239270" class="btn btn-outline-primary d-block mx-auto mt-auto" aria-label="Reservar masaje piedras calientes" style="width: 100%; max-width: 150px;">  <!-- d-block mx-auto para centrar; mt-auto para empujar al bottom; width max para consistencia -->
-              <i class="bi bi-whatsapp me-1"></i> Reservar  <!-- Icono Bootstrap centrado con me-1; texto alineado -->
-            </a>
-          </div>
-        </article>
-      </div>
-
-      <!-- Servicio 2 -->
-      <div class="col-12 col-md-6 col-lg-4">
-        <article class="card servicio-card h-100 p-0 shadow-sm d-flex flex-column">
-          <img src="images/masajeensilla.jpg" class="card-img-top flex-shrink-0" alt="Masaje en silla">
-          <div class="card-body d-flex flex-column text-center flex-grow-1">
-            <!-- Icono con spacing fijo -->
-            <i class="bi bi-person-check text-info fs-1 mb-3 d-block mx-auto" style="font-size: 2.5rem;"></i>
-            <h3 class="h6 mb-2">Masaje solo espalda en silla</h3>
-            <p class="mb-2"><strong>$10.000</strong></p>
-            <p class="text-muted small flex-grow-1 mb-3">
-              Sesión cómoda y rápida para aliviar tensión de cuello, hombros y espalda. Perfecto para pausas laborales o eventos corporativos.
-            </p>
-            <!-- Botón alineado al centro inferior -->
-            <a href="https://wa.me/56993239270" class="btn btn-outline-primary d-block mx-auto mt-auto" aria-label="Reservar masaje silla" style="width: 100%; max-width: 150px;">
-              <i class="bi bi-whatsapp me-1"></i> Reservar
-            </a>
-          </div>
-        </article>
-      </div>
-
-      <!-- Servicio 3 -->
-      <div class="col-12 col-md-6 col-lg-4">
-        <article class="card servicio-card h-100 p-0 shadow-sm d-flex flex-column">
-          <img src="images/cuerpoentero.jpg" class="card-img-top flex-shrink-0" alt="Masaje relajación cuerpo entero">
-          <div class="card-body d-flex flex-column text-center flex-grow-1">
-            <!-- Icono con spacing fijo -->
-            <i class="bi bi-body-text text-success fs-1 mb-3 d-block mx-auto" style="font-size: 2.5rem;"></i>
-            <h3 class="h6 mb-2">Masaje de relajación cuerpo entero</h3>
-            <p class="mb-2"><strong>$20.000</strong> — 45 min</p>
-            <p class="text-muted small flex-grow-1 mb-3">
-              Una sesión integral que combina técnicas suaves para inducir relajación corporal completa y reducir estrés. Recomendada para desconexión y bienestar.
-            </p>
-            <!-- Botón alineado al centro inferior -->
-            <a href="https://wa.me/56993239270" class="btn btn-outline-primary d-block mx-auto mt-auto" aria-label="Reservar masaje relajación" style="width: 100%; max-width: 150px;">
-              <i class="bi bi-whatsapp me-1"></i> Reservar
-            </a>
-          </div>
-        </article>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECCIÓN TESTIMONIOS -->
-<section id="testimonios" class="py-5 bg-light">
-  <div class="container">
-    <!-- Título con icono a la izquierda, centrado -->
-    <div class="row justify-content-center mb-4">
-      <div class="col-12 col-lg-10 text-center">
-        <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
-          <i class="bi bi-chat-quote text-primary fs-1" style="font-size: 3rem; flex-shrink: 0;"></i>
-          <h2 class="h2 mb-0">Testimonios</h2>
-        </div>
-        <p class="text-muted lead">
-          Escucha lo que dicen nuestros clientes sobre su experiencia de relajación y bienestar.
-        </p>
-      </div>
-    </div>
-    <!-- Contenido: Tarjetas de testimonios responsivas -->
-    <div class="row g-4">
-      <!-- Testimonio 1 -->
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body text-center p-4 d-flex flex-column">
-            <div class="d-flex justify-content-center mb-3">
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-fill text-warning"></i>
+  <main class="w-full">
+    <!-- Hero/Galería con fade lento -->
+    <section id="galeria" class="relative h-screen min-h-screen overflow-hidden w-full" data-aos="fade-in" data-aos-offset="-100">
+      <div class="swiper hero-swiper h-full w-full">
+        <div class="swiper-wrapper h-full">
+          <div class="swiper-slide relative h-full">
+            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover" alt="Masaje relajante en sala acogedora" loading="lazy">
+            <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/70 to-transparent backdrop-blur-sm">
+              <h1 class="text-4xl md:text-6xl font-bold text-white mb-2">Relajación profunda</h1>
+              <p class="text-xl text-white/80">Ambiente cálido y profesionales certificados.</p>
+              <a href="https://wa.me/56993239270" id="cta-modal" class="mt-4 inline-block bg-secondary text-white px-6 py-3 rounded-full font-semibold pulse hover:scale-105 transition gradient-fem">Agenda YA! 💆</a>
             </div>
-            <p class="card-text flex-grow-1 mb-3">"¡Una experiencia increíble! El masaje con piedras calientes me dejó renovada. Paola es una profesional excepcional."</p>
-            <small class="text-muted fw-bold">— María G.</small>
           </div>
-        </div>
-      </div>
-      <!-- Testimonio 2 -->
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body text-center p-4 d-flex flex-column">
-            <div class="d-flex justify-content-center mb-3">
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-half text-warning"></i>
+          <div class="swiper-slide relative h-full">
+            <img src="https://images.unsplash.com/photo-1610402601271-5b4bd5b3eba4?auto=format&fit=crop&w=1170&q=80" class="w-full h-full object-cover" alt="Masaje con piedras calientes" loading="lazy">
+            <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/70 to-transparent backdrop-blur-sm">
+              <h1 class="text-4xl md:text-6xl font-bold text-white mb-2">Piedras calientes</h1>
+              <p class="text-xl text-white/80">Alivia tensión y equilibra energía.</p>
+              <a href="https://wa.me/56993239270" id="cta-modal" class="mt-4 inline-block bg-secondary text-white px-6 py-3 rounded-full font-semibold pulse hover:scale-105 transition gradient-fem">Agenda YA! 💆</a>
             </div>
-            <p class="card-text flex-grow-1 mb-3">"El masaje en silla fue perfecto para mi día estresante. Rápido, efectivo y muy relajante. ¡Volveré pronto!"</p>
-            <small class="text-muted fw-bold">— Juan P.</small>
           </div>
-        </div>
-      </div>
-      <!-- Testimonio 3 -->
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body text-center p-4 d-flex flex-column">
-            <div class="d-flex justify-content-center mb-3">
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-fill text-warning"></i>
-              <i class="bi bi-star-fill text-warning"></i>
+          <div class="swiper-slide relative h-full">
+            <img src="https://www.hotelsviva.com/documents/443970/444511/20241031164011650IOUOBIHW/3622658e-8f60-92af-a128-98bd6a96f741" class="w-full h-full object-cover" alt="Espacios acogedores" loading="lazy">
+            <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/70 to-transparent backdrop-blur-sm">
+              <h1 class="text-4xl md:text-6xl font-bold text-white mb-2">Espacios acogedores</h1>
+              <p class="text-xl text-white/80">Tranquilidad y desconexión total.</p>
+              <a href="https://wa.me/56993239270" id="cta-modal" class="mt-4 inline-block bg-secondary text-white px-6 py-3 rounded-full font-semibold pulse hover:scale-105 transition gradient-fem">Agenda YA! 💆</a>
             </div>
-            <p class="card-text flex-grow-1 mb-3">"El masaje corporal completo me ayudó a desconectar del todo. Ambiente acogedor y atención personalizada. ¡Altamente recomendado!"</p>
-            <small class="text-muted fw-bold">— Laura M.</small>
           </div>
         </div>
+        <div class="swiper-pagination hero-pagination absolute bottom-4 left-1/2 transform -translate-x-1/2 space-x-2"></div>
+        <div class="swiper-button-next hero-next absolute right-4 top-1/2 -translate-y-1/2 text-white/80"></div>
+        <div class="swiper-button-prev hero-prev absolute left-4 top-1/2 -translate-y-1/2 text-white/80"></div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- SECCIÓN QUIÉNES SOMOS -->
-<section id="quienes-somos" class="py-5 bg-light">
-  <div class="container">
-    <!-- Título con icono a la izquierda, centrado -->
-    <div class="row justify-content-center mb-4">
-      <div class="col-12 col-lg-10 text-center">
-        <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
-          <i class="bi bi-person-heart text-primary fs-1" style="font-size: 3rem; flex-shrink: 0;"></i>
-          <h2 class="h2 mb-0">Quiénes somos</h2>
+    <!-- Servicios como Carrusel (se convertirá en grid en desktop) -->
+    <section id="servicios" class="py-16 bg-white w-full" data-aos="fade-up" data-aos-delay="200">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12" data-aos="zoom-in">
+          <div class="flex justify-center items-center gap-3 mb-4">
+            <i data-lucide="heart-pulse" class="w-12 h-12 text-primary"></i>
+            <h2 class="text-3xl font-bold">Nuestros Servicios</h2>
+          </div>
+          <p class="text-gray-600 max-w-2xl mx-auto">Elige la experiencia que mejor se adapte a tu bienestar.</p>
         </div>
-      </div>
-    </div>
-    <!-- Contenido: Texto y foto lado a lado -->
-    <div class="row g-4 align-items-center">
-      <div class="col-md-6 text-center">
-        <img src="images/paola.png" class="img-fluid rounded shadow-sm d-block mx-auto" alt="Paola, fundadora del Centro Masoterapéutico Mamá" loading="lazy">
-      </div>
-      <div class="col-md-6">
-        <p class="lead text-muted mb-4" style="text-align: justify;">
-          En Masoterapias Paola, con más de 10 años de experiencia en terapias holísticas, te recibe con calidez y dedicación. Cada sesión es un compromiso personal para restaurar tu equilibrio y confianza en tu cuerpo. Somos tu aliada en el camino hacia el bienestar auténtico y duradero.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECCIÓN DÓNDE ESTAMOS (icono a la izquierda del título, centrado overall) -->
-<section id="donde-estamos" class="py-4 bg-light">
-  <div class="container">
-    <!-- Wrapper flex para icono a la izquierda del título, centrado -->
-    <div class="d-flex align-items-center justify-content-center gap-3 mb-3 text-center">  <!-- d-flex para horizontal; gap-3 para espacio; justify-center para centrar el grupo -->
-      <i class="bi bi-geo-alt text-primary fs-1" style="font-size: 3rem; flex-shrink: 0;"></i>  <!-- Icono a la izquierda; flex-shrink-0 evita que se achique -->
-      <h2 class="h2 mb-0">Dónde estamos</h2>  <!-- mb-0 ya que el wrapper maneja espacio -->
-    </div>
-    <div class="card shadow-sm border-0">
-      <div class="card-body p-0">
-        <iframe src="https://www.google.com/maps?q=Giacomo+Puccini+1059,+San+Bernardo,+Chile&output=embed"
-                width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
-    </div>
-  </div>
-</section>
-  
-
-<!-- BOTONES FLOTANTES (migrados a Bootstrap: fixed bottom-right, stack vertical, círculos con shadows y hovers) -->
-<div class="position-fixed bottom-0 end-0 d-flex flex-column gap-2 p-3" style="z-index: 1060;">  <!-- position-fixed end-0 bottom-0 para derecha/inferior; d-flex flex-column gap-2; p-3 espaciado; z-index alto -->
-  <a href="https://wa.me/56912345678?text=Hola,%20quiero%20más%20información" 
-     rel="noopener noreferrer" 
-     class="btn btn-success rounded-circle d-flex align-items-center justify-content-center shadow-lg mb-1"  
-     style="width: 4rem; height: 4rem; font-size: 1.25rem; transition: all 0.3s ease; border: none; background-color: #25D366 !important;"
-     aria-label="Contactar por WhatsApp" 
-     title="Chatea por WhatsApp">
-    <i class="bi bi-whatsapp"></i>  <!-- Icono centrado -->
+        
+        <div class="swiper services-swiper">
+          <div class="swiper-wrapper">
+            <!-- Servicio 1 -->
+            <div class="swiper-slide">
+              <div class="glass rounded-xl p-6 shadow-lg hover:shadow-xl transition h-full max-w-md mx-auto" data-aos="flip-left">
+                <img src="images/piedrascalientes.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Masaje piedras calientes" loading="lazy">
+                <i data-lucide="flame" class="w-12 h-12 text-amber-500 mx-auto mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2 text-center">Piedras Calientes</h3>
+                <p class="text-gray-600 mb-2 text-center"><strong>$30.000</strong> — 45 min</p>
+                <p class="text-gray-500 text-sm text-center mb-4">Terapia con calor para relajar músculos profundos.</p>
+               <div class="flex justify-center mt-4">
+  <a href="https://wa.me/56993239270" 
+     class="bg-secondary text-white px-6 py-3 rounded-full font-semibold pulse hover:scale-105 transition gradient-fem">
+    Reservar
   </a>
-  <button onclick="window.scrollTo({top:0,behavior:'smooth'})" 
-          class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow-lg" 
-          style="width: 4rem; height: 4rem; font-size: 1.25rem; transition: all 0.3s ease; border: none;" 
-          aria-label="Volver arriba" 
-          title="Ir al inicio">
-    <i class="bi bi-arrow-up"></i>
-  </button>
 </div>
+              </div>
+            </div>
+            <!-- Servicio 2 -->
+            <div class="swiper-slide">
+              <div class="glass rounded-xl p-6 shadow-lg hover:shadow-xl transition h-full max-w-md mx-auto" data-aos="flip-up">
+                <img src="images/masajeensilla.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Masaje en silla" loading="lazy">
+                <i data-lucide="user-check" class="w-12 h-12 text-blue-500 mx-auto mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2 text-center">Masaje en Silla</h3>
+                <p class="text-gray-600 mb-2 text-center"><strong>$10.000</strong></p>
+                <p class="text-gray-500 text-sm text-center mb-4">Alivio rápido para cuello y hombros.</p>
+               <div class="flex justify-center mt-4">
+  <a href="https://wa.me/56993239270" 
+     class="bg-secondary text-white px-6 py-3 rounded-full font-semibold pulse hover:scale-105 transition gradient-fem">
+    Reservar
+  </a>
+</div>
+              </div>
+            </div>
+            <!-- Servicio 3 -->
+            <div class="swiper-slide">
+              <div class="glass rounded-xl p-6 shadow-lg hover:shadow-xl transition h-full max-w-md mx-auto" data-aos="flip-right">
+                <img src="images/cuerpoentero.jpg" class="w-full h-48 object-cover rounded-lg mb-4" alt="Masaje relajación cuerpo entero" loading="lazy">
+                <i data-lucide="activity" class="w-12 h-12 text-green-500 mx-auto mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2 text-center">Relajación Cuerpo Entero</h3>
+                <p class="text-gray-600 mb-2 text-center"><strong>$20.000</strong> — 45 min</p>
+                <p class="text-gray-500 text-sm text-center mb-4">Sesión integral para reducir estrés.</p>
+               <div class="flex justify-center mt-4">
+  <a href="https://wa.me/56993239270" 
+     class="bg-secondary text-white px-6 py-3 rounded-full font-semibold pulse hover:scale-105 transition gradient-fem">
+    Reservar
+  </a>
+</div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination services-pagination mt-4"></div>
+          <div class="swiper-button-next services-next text-primary"></div>
+          <div class="swiper-button-prev services-prev text-primary"></div>
+        </div>
+      </div>
+    </section>
 
-<!-- CSS adicional para hovers, ring y responsive (agrega en <style> o styles.css) -->
-<style>
-  /* Hover effects (scale y color) */
-  .btn-success:hover { background-color: #198754 !important; transform: scale(1.05) !important; }
-  .btn-primary:hover { background-color: #0d6efd !important; transform: scale(1.05) !important; }
-  
-  /* Ring-like shadow (simula ring-4) */
-  .position-fixed .btn { box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.2) !important; }
-  .position-fixed .btn:hover { box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.3) !important; }
-  
-  /* Responsive: Más grandes en desktop */
-  @media (min-width: 768px) {
-    .position-fixed .btn { width: 5rem !important; height: 5rem !important; font-size: 1.5rem !important; }
-  }
-</style>
+    <!-- (el resto del HTML se mantiene igual) -->
+    <!-- Beneficios (mantenida, con transiciones) -->
+    <section class="py-16 bg-neutral w-full" data-aos="fade-up" data-aos-delay="100">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold mb-4">Beneficios de Nuestras Terapias</h2>
+          <p class="text-gray-600">Descubre cómo podemos transformar tu bienestar diario.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="text-center p-6 glass rounded-xl" data-aos="fade-up" data-aos-delay="100">
+            <i data-lucide="zap" class="w-12 h-12 text-primary mx-auto mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2">Energía Renovada</h3>
+            <p class="text-gray-600">Reduce fatiga y aumenta vitalidad.</p>
+          </div>
+          <div class="text-center p-6 glass rounded-xl" data-aos="fade-up" data-aos-delay="200">
+            <i data-lucide="shield" class="w-12 h-12 text-primary mx-auto mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2">Salud Muscular</h3>
+            <p class="text-gray-600">Previene lesiones y alivia dolores.</p>
+          </div>
+          <div class="text-center p-6 glass rounded-xl" data-aos="fade-up" data-aos-delay="300">
+            <i data-lucide="heart" class="w-12 h-12 text-primary mx-auto mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2">Bienestar Emocional</h3>
+            <p class="text-gray-600">Mejora el estado de ánimo y reduce estrés.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <!-- FOOTER -->
-  <footer id="footer" class="text-center">
-    <div class="container">
-      <p class="mb-0 small">© <span id="currentYear"></span> Derechos reservados a Masoteria Paola </p>
-      <p class="mb-0 small"> Desarrollado por Hardwaremania</p>
+    <!-- Testimonios -->
+    <section id="testimonios" class="py-16 bg-white w-full" data-aos="fade-up" data-aos-delay="200">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <div class="flex justify-center items-center gap-3 mb-4">
+            <i data-lucide="message-circle" class="w-12 h-12 text-primary"></i>
+            <h2 class="text-3xl font-bold">Testimonios</h2>
+          </div>
+          <p class="text-gray-600">Lo que dicen nuestros clientes.</p>
+        </div>
+        <div class="swiper testimonials-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="glass rounded-xl p-6 shadow-lg mx-auto max-w-md">
+                <div class="flex justify-center mb-4">
+                  <i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star" class="w-5 h-5 text-yellow-400"></i>
+                </div>
+                <p class="text-gray-700 mb-4">"¡Increíble experiencia! Renovada por completo."</p>
+                <p class="font-semibold text-primary">— María G.</p>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="glass rounded-xl p-6 shadow-lg mx-auto max-w-md">
+                <div class="flex justify-center mb-4">
+                  <i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star-half" class="w-5 h-5 text-yellow-400"></i>
+                </div>
+                <p class="text-gray-700 mb-4">"Perfecto para días estresantes. ¡Volveré!"</p>
+                <p class="font-semibold text-primary">— Juan P.</p>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="glass rounded-xl p-6 shadow-lg mx-auto max-w-md">
+                <div class="flex justify-center mb-4">
+                  <i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><i data-lucide="star" class="w-5 h-5 text-yellow-400"></i>
+                </div>
+                <p class="text-gray-700 mb-4">"Desconexión total. Altamente recomendado."</p>
+                <p class="font-semibold text-primary">— Laura M.</p>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination testimonials-pagination mt-4"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiénes Somos (texto invitador, img nítida) -->
+    <section id="quienes-somos" class="py-8 bg-neutral w-full" data-aos="fade-up" data-aos-delay="100">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-8">
+          <div class="flex justify-center items-center gap-3 mb-4">
+            <i data-lucide="user" class="w-12 h-12 text-primary"></i>
+            <h2 class="text-3xl font-bold">Quiénes Somos</h2>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div data-aos="fade-right" class="flex justify-center">
+            <img id="paola-img" src="images/paola.png" class="rounded-xl shadow-lg flex justify-center" alt="Paola, fundadora" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Paola'">
+          </div>
+          <div data-aos="fade-left">
+            <p class="text-gray-600 leading-relaxed mb-4">Con más de 10 años de experiencia, te recibimos con calidez como a un miembro de la familia. Cada sesión restaura tu equilibrio y confianza, creando momentos de conexión y cuidado personalizados.</p>
+            <p class="text-gray-600 leading-relaxed">Ven y únete a nuestra familia de clientes satisfechos. Tu bienestar es nuestra prioridad – ¡agenda tu sesión hoy y siente la diferencia en cada toque!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dónde Estamos con iframe específico -->
+    <section id="donde-estamos" class="py-16 bg-white w-full" data-aos="fade-up" data-aos-delay="200">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <div class="flex justify-center items-center gap-3 mb-4">
+            <i data-lucide="map-pin" class="w-12 h-12 text-primary"></i>
+            <h2 class="text-3xl font-bold">Dónde Estamos</h2>
+          </div>
+        </div>
+        <div class="rounded-xl overflow-hidden shadow-lg mb-4">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.123456789012!2d-70.6996!3d-33.5922!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5f5b0b0b0b%3A0x0!2sGiacomo%20Puccini%201059%2C%20San%20Bernardo%2C%20Chile!5e0!3m2!1ses!2scl!4v1720400000000" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="text-center">
+          <a href="https://www.google.com/maps/dir/?api=1&destination=Giacomo+Puccini+1059,+San+Bernardo,+Chile" target="_blank" class="inline-block bg-primary text-white px-20 py-3 rounded-full hover:bg-pink-600 transition flex items-center justify-center"><i data-lucide="navigation" ></i>Cómo llegar</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer glass como header, w-full -->
+  <footer class="glass text-gray-900 py-8 w-full z-10">
+    <div class="container mx-auto px-4 text-center">
+      <p class="mb-2">&copy; <span id="currentYear"></span> Masoterapia Paola. Todos los derechos reservados.</p>
+      <p class="mb-2">Desarrollado por Hardwaremania</p>
+      <div class="flex justify-center gap-4 mt-4">
+        <a href="https://wa.me/56993239270" class="text-gray-700 hover:text-primary"><i data-lucide="whatsapp" class="w-5 h-5"></i></a>
+      </div>
+      <p class="text-sm text-gray-500 mt-4">Disponible solo los lunes: 9:00-19:00</p>
     </div>
   </footer>
 
-  <!-- SCRIPTS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Lucide icons
-    lucide.createIcons();
-    // Actualizar año en footer
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
+  <!-- Botones Flotantes (icono WA) -->
+  <div class="fixed bottom-4 right-4 flex flex-col gap-3 z-50">
+    <a href="https://wa.me/56993239270" class="bg-green-500 text-white p-4 rounded-full shadow-lg hover:scale-110 transition" aria-label="WhatsApp">
+      <i data-lucide="phone" class="w-6 h-6"></i>
+    </a>
+    <button onclick="scrollToTop()" class="bg-primary text-white p-4 rounded-full shadow-lg hover:scale-110 transition" aria-label="Arriba">
+      <i data-lucide="arrow-up"></i>
+    </button>
+  </div>
 
-    // Small client-side validation bootstrap style
-    (function () {
-      'use strict'
-      var forms = document.querySelectorAll('.needs-validation')
-      Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          } else {
-            // Aquí, en producción, harías fetch/post a tu backend o abrir un chat de WhatsApp con el mensaje prellenado.
-            event.preventDefault();
-            var nombre = document.getElementById('nombre').value || 'Cliente';
-            var mensaje = document.getElementById('mensaje').value || '';
-            var text = encodeURIComponent('Hola, soy ' + nombre + '. ' + mensaje);
-            window.open('https://wa.me/56993239270?text=' + text, '_blank');
-          }
-          form.classList.add('was-validated')
-        }, false)
-      })
-    })();
-  </script>
- 
+
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Init Lucide
+    lucide.createIcons();
     
+    // AOS Init
+    AOS.init({ duration: 1000, once: true, offset: 100 });
+    
+    // Hero Swiper (sin cambios)
+    new Swiper('.hero-swiper', { 
+      loop: true, 
+      effect: 'fade', 
+      fadeEffect: { crossFade: true }, 
+      autoplay: { delay: 5000 }, 
+      speed: 3000,
+      pagination: { el: '.hero-pagination', clickable: true }, 
+      navigation: { nextEl: '.hero-next', prevEl: '.hero-prev' } 
+    });
+
+    // Testimonials Swiper (sin cambios)
+    new Swiper('.testimonials-swiper', { 
+      loop: true, 
+      centeredSlides: true,
+      autoplay: { delay: 3000 }, 
+      pagination: { el: '.testimonials-pagination', clickable: true }, 
+      slidesPerView: 1, 
+      spaceBetween: 20, 
+      breakpoints: { 768: { slidesPerView: 2 } } 
+    });
+
+    // SERVICES: inicializar/destruir según ancho (mobile: carousel, desktop: grid)
+    let servicesSwiper = null;
+    function initServicesSwiper() {
+      // mobile threshold: < 1024 => convertir a carousel
+      const mobileThreshold = 1024;
+      if (window.innerWidth < mobileThreshold && !servicesSwiper) {
+        servicesSwiper = new Swiper('.services-swiper', { 
+          loop: true,
+          centeredSlides: true,
+          slidesPerView: 1, 
+          spaceBetween: 20, 
+          pagination: { el: '.services-swiper .services-pagination', clickable: true },
+          navigation: { nextEl: '.services-swiper .services-next', prevEl: '.services-swiper .services-prev' }
+        });
+      } else if (window.innerWidth >= mobileThreshold && servicesSwiper) {
+        servicesSwiper.destroy(true, true);
+        servicesSwiper = null;
+      }
+    }
+
+    // Llamamos al init y lo re-evaluamos en resize (debounced)
+    window.addEventListener('load', initServicesSwiper);
+    let _srvResizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(_srvResizeTimer);
+      _srvResizeTimer = setTimeout(initServicesSwiper, 200);
+    });
+
+    // Mobile Menu Fixed: toggles + backdrop + Escape
+    const toggle = document.getElementById('mobile-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const close = document.getElementById('close-mobile');
+    const backdrop = document.getElementById('mobile-backdrop');
+
+    function openMobileMenu() {
+      menu.classList.remove('translate-x-full');
+      backdrop.classList.remove('hidden');
+      toggle.setAttribute('aria-expanded', 'true');
+      // opcional: focus first link
+      const firstLink = menu.querySelector('a');
+      if (firstLink) firstLink.focus();
+    }
+    function closeMobileMenu() {
+      menu.classList.add('translate-x-full');
+      backdrop.classList.add('hidden');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    }
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (menu.classList.contains('translate-x-full')) openMobileMenu(); else closeMobileMenu();
+    });
+    close.addEventListener('click', (e) => { e.stopPropagation(); closeMobileMenu(); });
+    backdrop.addEventListener('click', () => { closeMobileMenu(); });
+
+    // Escape para cerrar
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMobileMenu();
+    });
+
+    // Scroll to Top
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    
+    // Preloader
+    window.addEventListener('load', () => document.getElementById('preloader').style.display = 'none');
+    
+    // Año Footer
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
